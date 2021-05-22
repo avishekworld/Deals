@@ -1,0 +1,61 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+
+android {
+  compileSdkVersion compile_sdk_version
+  buildToolsVersion = build_tools_version
+
+  defaultConfig {
+    applicationId "com.target.targetcasestudy"
+    minSdkVersion min_sdk_version
+    targetSdkVersion target_sdk_version
+    versionCode version_code
+    versionName version_name
+    testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+  }
+
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
+
+  buildTypes {
+    release {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+    }
+  }
+}
+
+dependencies {
+  implementation fileTree(dir: 'libs', include: ['*.jar'])
+  implementation project (":domain")
+  implementation project (":data")
+
+  implementation "androidx.appcompat:appcompat:$android_x_compat_version"
+  implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$android_x_lifecycle_version"
+  implementation "androidx.lifecycle:lifecycle-livedata-ktx:$android_x_lifecycle_version"
+  implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
+  implementation "androidx.fragment:fragment-ktx:$fragment_ktx_version"
+  implementation "com.google.android.material:material:$android_material_version"
+
+  implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+  implementation "androidx.core:core-ktx:$android_x_kotlin_ext"
+  implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlin_coroutine_version"
+  implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlin_coroutine_version"
+  implementation "androidx.constraintlayout:constraintlayout:$constraint_layout_version"
+
+  /*third party library*/
+  implementation "org.koin:koin-androidx-viewmodel:$koin_version"
+  implementation 'androidx.lifecycle:lifecycle-process:2.3.0'
+  implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+  implementation 'androidx.viewpager:viewpager:1.0.0'
+
+  testImplementation 'junit:junit:4.12'
+  testImplementation "org.koin:koin-test:$koin_version"
+  testImplementation "io.mockk:mockk:$mockk_version"
+
+  androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+  androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+  androidTestImplementation "org.koin:koin-test:$koin_version"
+}
