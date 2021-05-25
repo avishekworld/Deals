@@ -1,11 +1,16 @@
 package com.target.targetcasestudy
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.target.targetcasestudy.ui.deals.DealListFragment
 import com.target.targetcasestudy.ui.payment.PaymentDialogFragment
+import kotlinx.coroutines.launch
+import life.avishekworld.data.api.deals.TargetDealsApi
+import org.koin.android.ext.android.inject
 
 class MainActivity : AppCompatActivity() {
 

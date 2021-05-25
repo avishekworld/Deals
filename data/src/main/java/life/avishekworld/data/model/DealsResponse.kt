@@ -16,7 +16,7 @@ data class ProductResponse(
     @Json(name = "description") val description : String,
     @Json(name = "image_url") val imageUrl : String?,
     @Json(name = "regular_price") val regularPrice : PriceResponse,
-    @Json(name = "sale_price") val salePrice : PriceResponse
+    @Json(name = "sale_price") val salePrice : PriceResponse?
 )
 
 @JsonClass(generateAdapter = true)

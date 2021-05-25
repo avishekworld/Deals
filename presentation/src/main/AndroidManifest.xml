@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
   package="com.target.targetcasestudy">
 
+  <uses-permission android:name="android.permission.INTERNET" />
+
   <application
     android:name=".DealsApp"
     android:allowBackup="true"

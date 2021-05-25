@@ -7,8 +7,8 @@ import retrofit2.http.Path
 
 interface TargetDealsApi {
     @GET("deals")
-    fun getDeals() : DealsResponse
+    suspend fun getDeals() : DealsResponse
 
     @GET("deals/{id}")
-    fun getDealDetails(@Path("id") productId : Int) : ProductResponse
+    suspend fun getDealDetails(@Path("id") productId : Int) : ProductResponse
 }
