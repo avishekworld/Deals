@@ -1,0 +1,66 @@
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'kotlin-parcelize'
+}
+
+android {
+    compileSdkVersion compile_sdk_version
+    buildToolsVersion = build_tools_version
+
+    defaultConfig {
+        minSdkVersion min_sdk_version
+        targetSdkVersion target_sdk_version
+        versionCode version_code
+        versionName version_name
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+dependencies {
+    api fileTree(dir: "libs", include: ["*.jar", '*.aar'])
+    api project(':domain')
+    api project(':data')
+    api project(':presentation')
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "androidx.preference:preference-ktx:$android_x_prefs"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlin_coroutine_version"
+    implementation "androidx.test:core:$androidx_test_version"
+    implementation "androidx.core:core-ktx:$android_x_kotlin_ext"
+    implementation "io.mockk:mockk:$mockk_version"
+
+    debugImplementation ("androidx.fragment:fragment-testing:$fragment_version"){
+        exclude group: 'androidx.test', module: 'core'
+    }
+
+    kapt "androidx.databinding:databinding-compiler:4.0.1"
+
+    implementation "androidx.arch.core:core-testing:$android_x_arch_version"
+    implementation "androidx.test.espresso:espresso-core:$espresso_core"
+    implementation "androidx.test.espresso:espresso-idling-resource:$espresso_core"
+    implementation "androidx.test.ext:junit:$androidx_junit"
+
+    api "io.insert-koin:koin-core:$koin_version"
+    implementation "io.insert-koin:koin-test-junit4:$koin_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlin_coroutine_test"
+    implementation "org.robolectric:robolectric:$robolectric_version"
+
+}

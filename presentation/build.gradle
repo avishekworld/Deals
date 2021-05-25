@@ -44,18 +44,18 @@ dependencies {
   implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlin_coroutine_version"
   implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlin_coroutine_version"
   implementation "androidx.constraintlayout:constraintlayout:$constraint_layout_version"
-
-  /*third party library*/
-  implementation "org.koin:koin-androidx-viewmodel:$koin_version"
   implementation 'androidx.lifecycle:lifecycle-process:2.3.0'
   implementation 'androidx.legacy:legacy-support-v4:1.0.0'
   implementation 'androidx.viewpager:viewpager:1.0.0'
 
+  /*third party library*/
+  implementation "io.coil-kt:coil:$coil_version"
+
   testImplementation 'junit:junit:4.12'
-  testImplementation "org.koin:koin-test:$koin_version"
+  testImplementation "io.insert-koin:koin-test:$koin_version"
   testImplementation "io.mockk:mockk:$mockk_version"
 
   androidTestImplementation 'androidx.test.ext:junit:1.1.1'
   androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-  androidTestImplementation "org.koin:koin-test:$koin_version"
+  androidTestImplementation "io.insert-koin:koin-test:$koin_version"
 }

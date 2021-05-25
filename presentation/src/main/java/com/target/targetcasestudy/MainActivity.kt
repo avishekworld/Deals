@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import com.target.targetcasestudy.ui.DealListFragment
+import com.target.targetcasestudy.ui.deals.DealListFragment
 import com.target.targetcasestudy.ui.payment.PaymentDialogFragment
 
 class MainActivity : AppCompatActivity() {
