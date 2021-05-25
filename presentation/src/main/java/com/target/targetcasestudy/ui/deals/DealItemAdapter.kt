@@ -22,8 +22,8 @@ class DealItemAdapter : RecyclerView.Adapter<DealItemViewHolder>() {
 
   override fun onBindViewHolder(viewHolder: DealItemViewHolder, position: Int) {
     val item = StaticData.deals[position]
-    viewHolder.itemView.findViewById<TextView>(R.id.deal_list_item_title).text = item.title
-    viewHolder.itemView.findViewById<TextView>(R.id.deal_list_item_price).text = item.price
+    viewHolder.itemView.findViewById<TextView>(R.id.deal_item_title_text_view).text = item.title
+    viewHolder.itemView.findViewById<TextView>(R.id.deal_item_price_text_view).text = item.price
   }
 }
 
