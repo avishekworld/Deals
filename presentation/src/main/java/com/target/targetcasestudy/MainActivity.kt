@@ -1,22 +1,24 @@
 package com.target.targetcasestudy
 
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
+import com.target.targetcasestudy.databinding.ActivityMainBinding
 import com.target.targetcasestudy.ui.deals.DealListFragment
+import com.target.targetcasestudy.ui.deals.viewmodel.DealVM
 import com.target.targetcasestudy.ui.payment.PaymentDialogFragment
-import kotlinx.coroutines.launch
-import life.avishekworld.data.api.deals.TargetDealsApi
-import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
 
+  private val viewModel : DealVM by viewModel()
+  private lateinit var binding : ActivityMainBinding
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_main)
+    binding = ActivityMainBinding.inflate(layoutInflater)
+    setContentView(binding.root)
 
     supportFragmentManager.beginTransaction()
       .replace(R.id.container, DealListFragment())

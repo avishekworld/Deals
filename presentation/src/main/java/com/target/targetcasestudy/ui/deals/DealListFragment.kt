@@ -9,19 +9,60 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 import com.target.targetcasestudy.R
+import com.target.targetcasestudy.databinding.FragmentDealItemBinding
+import com.target.targetcasestudy.databinding.FragmentDealListBinding
+import com.target.targetcasestudy.ui.deals.viewmodel.DealVM
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class DealListFragment : Fragment() {
 
+  private val viewModel : DealVM by sharedViewModel()
+  private lateinit var binding : FragmentDealListBinding
+
+  private val adapter by lazy {
+    DealItemAdapter()
+  }
+
+  private val layoutManager by lazy {
+    LinearLayoutManager(requireContext())
+  }
+
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View? {
-    val view =  inflater.inflate(R.layout.fragment_deal_list, container, false)
+  ): View {
+    binding = FragmentDealListBinding.inflate(inflater, container, false).apply {
+      recyclerView.adapter = adapter
+      recyclerView.layoutManager = layoutManager
+    }
+    return binding.root
+  }
 
-    view.findViewById<RecyclerView>(R.id.recycler_view).layoutManager = LinearLayoutManager(requireContext())
-    view.findViewById<RecyclerView>(R.id.recycler_view).adapter = DealItemAdapter()
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
+    viewModel.viewState.observe(viewLifecycleOwner) {
+      renderProcessingViewState(it.processingViewState)
+      renderDealListViewState(it.dealListViewState)
+    }
+    viewModel.handleEvent(DealVM.DealsEvent.DealsListViewInit)
+  }
 
-    return view
+  private fun renderProcessingViewState(processingViewState: DealVM.ProcessingViewState) {
+    when(processingViewState) {
+      is DealVM.ProcessingViewState.Hide -> binding.processingView.visibility = View.GONE
+      is DealVM.ProcessingViewState.Show -> binding.processingView.visibility = View.VISIBLE
+    }
+  }
+
+  private fun renderDealListViewState(dealListViewState: DealVM.DealListViewState) {
+    when(dealListViewState) {
+      is DealVM.DealListViewState.Hide -> binding.contentView.visibility = View.GONE
+      is DealVM.DealListViewState.Show -> {
+        binding.contentView.visibility = View.VISIBLE
+        adapter.handleDeals(dealListViewState.deals)
+      }
+    }
   }
 }

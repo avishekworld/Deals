@@ -44,11 +44,11 @@ val dataModule = module {
         CacheUtil()
     }
 
-    single<Mapper<ProductResponse, Product>> {
+    single {
         ProductMapper()
     }
 
-    single<Mapper<DealsResponse, Deals>> {
+    single {
         DealsMapper(get())
     }
 

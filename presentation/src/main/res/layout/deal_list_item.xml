@@ -38,7 +38,7 @@
             android:layout_marginStart="@dimen/deal_item_margin"
             android:layout_marginEnd="@dimen/deal_item_margin"
             android:lines="2"
-            tools:text="Google Pixel 4"
+            tools:text="Google Pixel 4 Panda Black 256GB 50 MegaPixel"
             android:textSize="@dimen/deals_title_text_size"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toTopOf="@id/deal_item_horizontal_line"
@@ -70,10 +70,11 @@
         <TextView
             android:id="@+id/deal_item_ship_text_view"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:text="@string/ship"
             android:textSize="@dimen/deals_ship_text_size"
-            android:layout_marginEnd="@dimen/deal_item_margin"
+            android:layout_marginStart="@dimen/deal_item_margin"
+            android:layout_marginEnd="@dimen/deal_item_margin_large"
             android:layout_marginTop="@dimen/deal_item_top_margin"
             app:layout_constraintEnd_toEndOf="@id/deal_item_or_text_view"
             app:layout_constraintTop_toBottomOf="@id/deal_item_horizontal_line" />
@@ -81,10 +82,11 @@
         <TextView
             android:id="@+id/deal_item_or_text_view"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:text="@string/or"
             android:textSize="@dimen/deals_ship_text_size"
-            android:layout_marginEnd="@dimen/deal_item_margin"
+            android:layout_marginStart="@dimen/deal_item_margin"
+            android:layout_marginEnd="@dimen/deal_item_margin_large"
             android:layout_marginTop="@dimen/deal_item_top_margin"
             app:layout_constraintEnd_toEndOf="@id/deal_item_aisle_text_view"
             app:layout_constraintTop_toBottomOf="@id/deal_item_horizontal_line" />
@@ -92,19 +94,14 @@
         <TextView
             android:id="@+id/deal_item_aisle_text_view"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            tools:text="B1"
+            android:layout_height="wrap_content"
+            tools:text="M21"
             android:textSize="@dimen/deals_ship_text_size"
+            android:textAllCaps="true"
             android:textColor="@color/colorPrimary"
-            android:layout_marginEnd="@dimen/deal_item_margin"
+            android:layout_marginStart="@dimen/deal_item_margin"
+            android:layout_marginEnd="@dimen/deal_item_margin_large"
             android:layout_marginTop="@dimen/deal_item_top_margin"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/deal_item_horizontal_line" />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            app:layout_constraintStart_toEndOf="@id/deal_item_price_text_view"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/deal_item_horizontal_line" />
 
