@@ -13,14 +13,16 @@ import life.avishekworld.domain.model.Deals
 import life.avishekworld.domain.model.Product
 import life.avishekworld.domain.util.isNotNullAndNotEmpty
 
-class DealItemAdapter : RecyclerView.Adapter<DealItemViewHolder>() {
+typealias ItemClickListener = (Product) -> Unit
+
+class DealItemAdapter(private val itemClickListener: ItemClickListener) : RecyclerView.Adapter<DealItemViewHolder>() {
 
   private var deals : Deals = Deals(emptyList())
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DealItemViewHolder {
     val inflater = LayoutInflater.from(parent.context)
     val binding = DealListItemBinding.inflate(inflater, parent, false)
-    return DealItemViewHolder(binding)
+    return DealItemViewHolder(binding, itemClickListener)
   }
 
   override fun getItemCount(): Int {
@@ -39,7 +41,7 @@ class DealItemAdapter : RecyclerView.Adapter<DealItemViewHolder>() {
   }
 }
 
-class DealItemViewHolder(private val binding: DealListItemBinding) : RecyclerView.ViewHolder(binding.root) {
+class DealItemViewHolder(private val binding: DealListItemBinding, private val itemClickListener: ItemClickListener) : RecyclerView.ViewHolder(binding.root) {
   private val titleTextView : TextView by lazy {
     binding.dealItemTitleTextView
   }
@@ -56,7 +58,18 @@ class DealItemViewHolder(private val binding: DealListItemBinding) : RecyclerVie
     binding.dealImageView
   }
 
+  private var currentProduct : Product? = null
+
+  init {
+      binding.root.setOnClickListener {
+        currentProduct?.let { product ->
+          itemClickListener(product)
+        }
+      }
+  }
+
   fun bind(product: Product) {
+    currentProduct = product
     titleTextView.text = product.title
     priceTextView.text = product.getSalePriceText()
     aisleTextView.text = product.aisle

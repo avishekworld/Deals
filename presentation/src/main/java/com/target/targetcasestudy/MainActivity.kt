@@ -5,9 +5,9 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.target.targetcasestudy.databinding.ActivityMainBinding
-import com.target.targetcasestudy.ui.deals.DealListFragment
+import com.target.targetcasestudy.navigation.NavEvent
+import com.target.targetcasestudy.navigation.SingeEvent
 import com.target.targetcasestudy.ui.deals.viewmodel.DealVM
-import com.target.targetcasestudy.ui.payment.PaymentDialogFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
@@ -19,10 +19,31 @@ class MainActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     binding = ActivityMainBinding.inflate(layoutInflater)
     setContentView(binding.root)
+    viewModel.navigationEvent.observe(this) {
+      handleNavigation(it)
+    }
+    viewModel.handleEvent(DealVM.DealsEvent.MainViewInit)
+  }
 
-    supportFragmentManager.beginTransaction()
-      .replace(R.id.container, DealListFragment())
-      .commit()
+  private fun handleNavigation(singleNavEvent: SingeEvent<NavEvent>) {
+    singleNavEvent.consume()?.let { navEvent ->
+      when (navEvent) {
+        is NavEvent.ActivityNavEvent -> {
+          startActivity(navEvent.build(this))
+        }
+        is NavEvent.FragmentNavEvent -> {
+          supportFragmentManager.beginTransaction().apply {
+            add(binding.container.id, navEvent.build())
+            setReorderingAllowed(true)
+            addToBackStack(null)
+            commit()
+          }
+        }
+        is NavEvent.FragmentDialogNavEvent -> {
+          navEvent.build().show(supportFragmentManager, "")
+        }
+      }
+    }
   }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -33,7 +54,7 @@ class MainActivity : AppCompatActivity() {
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     return when (item.itemId) {
       R.id.credit_card -> {
-        PaymentDialogFragment().show(supportFragmentManager, "CreditCardValidation")
+        viewModel.handleEvent(DealVM.DealsEvent.PaymentViewClicked)
         true
       }
       else -> false

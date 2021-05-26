@@ -18,4 +18,8 @@ class DealItemFragment : Fragment() {
     // Inflate the layout for this fragment
     return inflater.inflate(R.layout.fragment_deal_item, container, false)
   }
+
+  companion object {
+    const val PRODUCT_EXTRA = "product"
+  }
 }

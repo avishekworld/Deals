@@ -1,7 +1,13 @@
 package com.target.targetcasestudy.ui.deals.viewmodel
 
+import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.*
+import com.target.targetcasestudy.navigation.NavEvent
+import com.target.targetcasestudy.navigation.SingeEvent
+import com.target.targetcasestudy.ui.deals.DealItemFragment
+import com.target.targetcasestudy.ui.deals.DealListFragment
+import com.target.targetcasestudy.ui.payment.PaymentDialogFragment
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
@@ -23,6 +29,8 @@ class DealVM(private val getDealsUseCase: GetDealsUseCase,
     private val state : InternalState
         get() = requireNotNull(_internalState.value)
 
+    val navigationEvent  = MutableLiveData<SingeEvent<NavEvent>>()
+
     private val channel = Channel<DealsEvent>(Channel.UNLIMITED)
 
     init {
@@ -32,8 +40,11 @@ class DealVM(private val getDealsUseCase: GetDealsUseCase,
             .onEach { event ->
                 Log.d(TAG, "event $event")
                 when(event) {
-                    is DealsEvent.DealsListViewInit -> handleDealsListViewInit(event)
+                    is DealsEvent.MainViewInit -> handleMainViewInit(event)
+                    is DealsEvent.DealListViewInit -> handleDealsListViewInit(event)
+                    is DealsEvent.DealListItemSelected -> handleDealsListItemSelected(event)
                     is DealsEvent.DealDetailsViewInit -> handleDealsDetailsViewInit(event)
+                    is DealsEvent.PaymentViewClicked -> handlePaymentClicked(event)
                 }
             }
             .launchIn(viewModelScope)
@@ -43,8 +54,19 @@ class DealVM(private val getDealsUseCase: GetDealsUseCase,
     private fun updateState(state : InternalState) {
         _internalState.value = state
     }
+    private fun sendNavigationEvent(singleNavEvent: SingeEvent<NavEvent>) {
+        navigationEvent.value = singleNavEvent
+    }
 
-    private fun handleDealsListViewInit(event: DealsEvent.DealsListViewInit) {
+    fun handleEvent(event : DealsEvent) {
+        channel.offer(event)
+    }
+
+    private fun handleMainViewInit(mainViewInit: DealsEvent.MainViewInit) {
+        sendNavigationEvent(SingeEvent(NavEvent.FragmentNavEvent(DealListFragment::class.java, Bundle())))
+    }
+
+    private fun handleDealsListViewInit(event: DealsEvent.DealListViewInit) {
         viewModelScope.launch {
             updateState(state.copy(
                 viewState = state.viewState.copy(
@@ -57,6 +79,12 @@ class DealVM(private val getDealsUseCase: GetDealsUseCase,
                     processingViewState = ProcessingViewState.Hide,
                     dealListViewState = DealListViewState.Show(deals))))
         }
+    }
+
+    private fun handleDealsListItemSelected(listItemSelected: DealVM.DealsEvent.DealListItemSelected) {
+        sendNavigationEvent(SingeEvent(NavEvent.FragmentNavEvent(DealItemFragment::class.java, Bundle().apply {
+            putParcelable(DealItemFragment.PRODUCT_EXTRA, listItemSelected.product)
+        })))
     }
 
     private fun handleDealsDetailsViewInit(event: DealsEvent.DealDetailsViewInit) {
@@ -74,8 +102,8 @@ class DealVM(private val getDealsUseCase: GetDealsUseCase,
         }
     }
 
-    fun handleEvent(event : DealsEvent) {
-        channel.offer(event)
+    private fun handlePaymentClicked(paymentViewClicked: DealsEvent.PaymentViewClicked) {
+        sendNavigationEvent(SingeEvent(NavEvent.FragmentDialogNavEvent(PaymentDialogFragment::class.java, Bundle())))
     }
 
     private fun getDefaultViewState() : ViewState {
@@ -87,8 +115,11 @@ class DealVM(private val getDealsUseCase: GetDealsUseCase,
     }
 
     sealed class DealsEvent {
-        object DealsListViewInit : DealsEvent()
+        object MainViewInit : DealsEvent()
+        object DealListViewInit : DealsEvent()
+        data class DealListItemSelected(val product: Product) : DealsEvent()
         data class DealDetailsViewInit(val id : Int) : DealsEvent()
+        object PaymentViewClicked : DealsEvent()
     }
 
     data class InternalState(val viewState: ViewState)

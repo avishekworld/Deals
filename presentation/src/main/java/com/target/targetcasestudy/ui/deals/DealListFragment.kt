@@ -6,14 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 
-import com.target.targetcasestudy.R
-import com.target.targetcasestudy.databinding.FragmentDealItemBinding
 import com.target.targetcasestudy.databinding.FragmentDealListBinding
 import com.target.targetcasestudy.ui.deals.viewmodel.DealVM
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class DealListFragment : Fragment() {
@@ -22,7 +18,7 @@ class DealListFragment : Fragment() {
   private lateinit var binding : FragmentDealListBinding
 
   private val adapter by lazy {
-    DealItemAdapter()
+    DealItemAdapter { product -> viewModel.handleEvent(DealVM.DealsEvent.DealListItemSelected(product))  }
   }
 
   private val layoutManager by lazy {
@@ -46,7 +42,7 @@ class DealListFragment : Fragment() {
       renderProcessingViewState(it.processingViewState)
       renderDealListViewState(it.dealListViewState)
     }
-    viewModel.handleEvent(DealVM.DealsEvent.DealsListViewInit)
+    viewModel.handleEvent(DealVM.DealsEvent.DealListViewInit)
   }
 
   private fun renderProcessingViewState(processingViewState: DealVM.ProcessingViewState) {
