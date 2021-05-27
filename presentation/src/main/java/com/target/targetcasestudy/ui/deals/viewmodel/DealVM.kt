@@ -44,6 +44,7 @@ class DealVM(private val getDealsUseCase: GetDealsUseCase,
                     is DealsEvent.DealListViewInit -> handleDealsListViewInit(event)
                     is DealsEvent.DealListItemSelected -> handleDealsListItemSelected(event)
                     is DealsEvent.DealDetailsViewInit -> handleDealsDetailsViewInit(event)
+                    is DealsEvent.DealDetailsViewInitWithId -> handleDealsDetailsViewInit(event)
                     is DealsEvent.PaymentViewClicked -> handlePaymentClicked(event)
                 }
             }
@@ -88,6 +89,14 @@ class DealVM(private val getDealsUseCase: GetDealsUseCase,
     }
 
     private fun handleDealsDetailsViewInit(event: DealsEvent.DealDetailsViewInit) {
+        event.bundle.getParcelable<Product>(DealItemFragment.PRODUCT_EXTRA)?.let { product ->
+            updateState(state.copy(
+                viewState = state.viewState.copy(
+                    dealDetailsViewState = DealDetailsViewState.Show(product))))
+        }
+    }
+
+    private fun handleDealsDetailsViewInit(event: DealsEvent.DealDetailsViewInitWithId) {
         viewModelScope.launch {
             updateState(state.copy(
                 viewState = state.viewState.copy(
@@ -118,7 +127,8 @@ class DealVM(private val getDealsUseCase: GetDealsUseCase,
         object MainViewInit : DealsEvent()
         object DealListViewInit : DealsEvent()
         data class DealListItemSelected(val product: Product) : DealsEvent()
-        data class DealDetailsViewInit(val id : Int) : DealsEvent()
+        data class DealDetailsViewInit(val bundle: Bundle) : DealsEvent()
+        data class DealDetailsViewInitWithId(val id : Int) : DealsEvent()
         object PaymentViewClicked : DealsEvent()
     }
 

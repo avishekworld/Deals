@@ -33,9 +33,9 @@ class MainActivity : AppCompatActivity() {
         }
         is NavEvent.FragmentNavEvent -> {
           supportFragmentManager.beginTransaction().apply {
-            add(binding.container.id, navEvent.build())
+            replace(binding.container.id, navEvent.build())
             setReorderingAllowed(true)
-            addToBackStack(null)
+            addToBackStack("")
             commit()
           }
         }

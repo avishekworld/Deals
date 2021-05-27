@@ -12,4 +12,7 @@
   <string name="credit_card_number_hint">Credit card number</string>
     <string name="ship">ship</string>
   <string name="or">or</string>
+    <string name="reg">Reg:</string>
+    <string name="add_to_list">add to list</string>
+  <string name="add_to_cart">add to cart</string>
 </resources>

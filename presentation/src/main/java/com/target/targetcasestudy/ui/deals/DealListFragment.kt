@@ -33,6 +33,7 @@ class DealListFragment : Fragment() {
       recyclerView.adapter = adapter
       recyclerView.layoutManager = layoutManager
     }
+    //TODO use data binding
     return binding.root
   }
 

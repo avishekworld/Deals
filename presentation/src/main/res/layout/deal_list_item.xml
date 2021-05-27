@@ -9,7 +9,7 @@
         android:id="@+id/deal_image_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/deal_item_image_margin"
+        android:layout_margin="@dimen/deal_list_item_image_margin"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -35,11 +35,11 @@
             android:id="@+id/deal_item_title_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/deal_item_margin"
-            android:layout_marginEnd="@dimen/deal_item_margin"
+            android:layout_marginStart="@dimen/deal_list_item_margin"
+            android:layout_marginEnd="@dimen/deal_list_item_margin"
             android:lines="2"
             tools:text="Google Pixel 4 Panda Black 256GB 50 MegaPixel"
-            android:textSize="@dimen/deals_title_text_size"
+            android:textSize="@dimen/deal_list_item_title_text_size"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toTopOf="@id/deal_item_horizontal_line"
              />
@@ -53,17 +53,17 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginStart="@dimen/deal_item_margin" />
+            android:layout_marginStart="@dimen/deal_list_item_margin" />
 
         <TextView
             android:id="@+id/deal_item_price_text_view"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginStart="@dimen/deal_item_margin"
-            android:layout_marginTop="@dimen/deal_item_top_margin"
+            android:layout_marginStart="@dimen/deal_list_item_margin"
+            android:layout_marginTop="@dimen/deal_list_item_top_margin"
             android:lines="2"
             tools:text="$94.00"
-            android:textSize="@dimen/deals_price_text_size"
+            android:textSize="@dimen/deal_list_item_price_text_size"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/deal_item_horizontal_line" />
 
@@ -72,9 +72,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/ship"
-            android:textSize="@dimen/deals_ship_text_size"
-            android:layout_marginEnd="@dimen/deal_item_margin"
-            android:layout_marginTop="@dimen/deal_item_top_margin"
+            android:textSize="@dimen/deal_list_item__ship_text_size"
+            android:layout_marginEnd="@dimen/deal_list_item_margin"
+            android:layout_marginTop="@dimen/deal_list_item_top_margin"
             app:layout_constraintEnd_toStartOf="@id/deal_item_or_text_view"
             app:layout_constraintTop_toBottomOf="@id/deal_item_horizontal_line" />
 
@@ -83,9 +83,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/or"
-            android:textSize="@dimen/deals_ship_text_size"
-            android:layout_marginEnd="@dimen/deal_item_margin"
-            android:layout_marginTop="@dimen/deal_item_top_margin"
+            android:textSize="@dimen/deal_list_item__ship_text_size"
+            android:layout_marginEnd="@dimen/deal_list_item_margin"
+            android:layout_marginTop="@dimen/deal_list_item_top_margin"
             app:layout_constraintEnd_toStartOf="@id/deal_item_aisle_text_view"
             app:layout_constraintTop_toBottomOf="@id/deal_item_horizontal_line" />
 
@@ -94,11 +94,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="M21"
-            android:textSize="@dimen/deals_ship_text_size"
+            android:textSize="@dimen/deal_list_item__ship_text_size"
             android:textAllCaps="true"
             android:textColor="@color/colorPrimary"
-            android:layout_marginEnd="@dimen/deal_item_margin"
-            android:layout_marginTop="@dimen/deal_item_top_margin"
+            android:layout_marginEnd="@dimen/deal_list_item_margin"
+            android:layout_marginTop="@dimen/deal_list_item_top_margin"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/deal_item_horizontal_line" />
 

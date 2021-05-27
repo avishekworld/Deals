@@ -7,6 +7,6 @@ import life.avishekworld.domain.model.Deals
 class DealsMapper(private val productMapper: ProductMapper) : Mapper<DealsResponse, Deals> {
 
     override fun map(input: DealsResponse): Deals {
-        return Deals(input.productList.map { productMapper.map(it) })
+        return Deals(input.productList.filter { it.salePrice != null }.map { productMapper.map(it) })
     }
 }

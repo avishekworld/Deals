@@ -1,11 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+  <!--deal list item-->
   <dimen name="deal_list_item_image_size">80dp</dimen>
-  <dimen name="deal_item_image_margin">20dp</dimen>
-  <dimen name="deal_item_margin">20dp</dimen>
-  <dimen name="deal_item_margin_large">30dp</dimen>
-  <dimen name="deal_item_top_margin">5dp</dimen>
-  <dimen name="deals_title_text_size">18sp</dimen>
-  <dimen name="deals_price_text_size">18sp</dimen>
-  <dimen name="deals_ship_text_size">16sp</dimen>
+  <dimen name="deal_list_item_image_margin">20dp</dimen>
+  <dimen name="deal_list_item_margin">20dp</dimen>
+  <dimen name="deal_list_item_margin_large">30dp</dimen>
+  <dimen name="deal_list_item_top_margin">5dp</dimen>
+  <dimen name="deal_list_item_title_text_size">18sp</dimen>
+  <dimen name="deal_list_item_price_text_size">18sp</dimen>
+  <dimen name="deal_list_item__ship_text_size">16sp</dimen>
+
+  <!--deal details item-->
+  <dimen name="deal_details_item_image_margin">60dp</dimen>
+  <dimen name="deal_details_price_margin">10dp</dimen>
+  <dimen name="deal_details_price_text_size">32sp</dimen>
+  <dimen name="deal_details_name_margin">10dp</dimen>
+  <dimen name="deal_details_name_text_size">26sp</dimen>
+  <dimen name="deal_details_description_text_size">18sp</dimen>
+  <dimen name="deal_details_action_text_size">24sp</dimen>
 </resources>
