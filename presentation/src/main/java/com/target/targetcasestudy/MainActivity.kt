@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.commit
 import com.target.targetcasestudy.databinding.ActivityMainBinding
 import com.target.targetcasestudy.navigation.NavEvent
 import com.target.targetcasestudy.navigation.SingeEvent
@@ -32,11 +33,12 @@ class MainActivity : AppCompatActivity() {
           startActivity(navEvent.build(this))
         }
         is NavEvent.FragmentNavEvent -> {
-          supportFragmentManager.beginTransaction().apply {
-            replace(binding.container.id, navEvent.build())
+          supportFragmentManager.commit {
             setReorderingAllowed(true)
-            addToBackStack("")
-            commit()
+            if (supportFragmentManager.fragments.isNotEmpty()) {
+              addToBackStack("back_stack")
+            }
+            replace(binding.container.id, navEvent.build())
           }
         }
         is NavEvent.FragmentDialogNavEvent -> {

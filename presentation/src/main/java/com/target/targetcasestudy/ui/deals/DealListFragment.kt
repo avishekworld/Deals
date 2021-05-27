@@ -21,9 +21,6 @@ class DealListFragment : Fragment() {
     DealItemAdapter { product -> viewModel.handleEvent(DealVM.DealsEvent.DealListItemSelected(product))  }
   }
 
-  private val layoutManager by lazy {
-    LinearLayoutManager(requireContext())
-  }
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
@@ -31,7 +28,7 @@ class DealListFragment : Fragment() {
   ): View {
     binding = FragmentDealListBinding.inflate(inflater, container, false).apply {
       recyclerView.adapter = adapter
-      recyclerView.layoutManager = layoutManager
+      recyclerView.layoutManager = LinearLayoutManager(requireContext())
     }
     //TODO use data binding
     return binding.root
