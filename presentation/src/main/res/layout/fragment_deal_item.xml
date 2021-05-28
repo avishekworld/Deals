@@ -91,13 +91,15 @@
                         android:lines="1"
                         tools:text="Google Pixel 4 XL 256GB" />
 
-                    <TextView
+                    <androidx.emoji.widget.EmojiTextView
                         android:id="@+id/item_description_text_view"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_margin="@dimen/deal_details_name_margin"
                         android:layout_marginStart="8dp"
                         android:textSize="@dimen/deal_details_description_text_size"
+                        android:maxLength="500"
+                        android:ellipsize="marquee"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/item_title_text_view"
                         tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut risus enim, ornare vitae interdum ut, laoreet sit amet odio. Quisque fringilla, felis vel venenatis ultricies, nisi eros dapibus dolor, in placerat neque ipsum vel diam. In feugiat vitae purus eget venenatis. Morbi id tempus eros, mattis dapibus nunc. Integer rutrum interdum eros sit amet ultricies. Aliquam pretium fringilla erat, non pulvinar risus placerat non. Mauris est eros, viverra eget erat non, dictum pharetra tellus. Sed volutpat lobortis ipsum at convallis. Proin porttitor dignissim ligula, in tincidunt libero pretium eu. Suspendisse potenti. Integer urna neque, dignissim vel risus sed, commodo dignissim nisl. Integer in bibendum ligula, vel eleifend metus. Sed ante lacus, pharetra convallis nisi id, feugiat consequat massa. Aenean ultricies erat et purus interdum elementum." />

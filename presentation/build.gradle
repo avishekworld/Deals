@@ -60,6 +60,8 @@ dependencies {
 
   /*third party library*/
   implementation "io.coil-kt:coil:$coil_version"
+  implementation "androidx.emoji:emoji:$emoji_version"
+  implementation "androidx.emoji:emoji-bundled:$emoji_version"
 
   testImplementation 'junit:junit:4.12'
   testImplementation "io.insert-koin:koin-test:$koin_version"

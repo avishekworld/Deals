@@ -9,7 +9,7 @@ buildscript {
     /*tools*/
     ext.compile_sdk_version = 29
     ext.build_tools_version = '28.0.3'
-    ext.min_sdk_version = 29
+    ext.min_sdk_version = 21
     ext.target_sdk_version = 29
 
     //kotlin
@@ -25,6 +25,7 @@ buildscript {
     ext.constraint_layout_version = "2.0.4"
     ext.android_x_prefs = "1.1.1"
     ext.android_x_arch_version = "2.1.0"
+    ext.emoji_version = "1.1.0"
 
     /*jetpack*/
     ext.lifecycle_version = "2.2.0"

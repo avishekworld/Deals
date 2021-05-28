@@ -18,9 +18,11 @@ import life.avishekworld.domain.model.Deals
 import life.avishekworld.domain.model.Product
 import life.avishekworld.domain.usecase.deals.GetDealsDetailsUseCase
 import life.avishekworld.domain.usecase.deals.GetDealsUseCase
+import life.avishekworld.domain.util.CardValidator
 
 class DealVM(private val getDealsUseCase: GetDealsUseCase,
-             private val getDealsDetailsUseCase: GetDealsDetailsUseCase) : ViewModel() {
+             private val getDealsDetailsUseCase: GetDealsDetailsUseCase,
+             private val cardValidator: CardValidator) : ViewModel() {
 
     private val _internalState = MutableLiveData(InternalState(getDefaultViewState()))
     val viewState : LiveData<ViewState> = _internalState.map {
@@ -46,6 +48,9 @@ class DealVM(private val getDealsUseCase: GetDealsUseCase,
                     is DealsEvent.DealDetailsViewInit -> handleDealsDetailsViewInit(event)
                     is DealsEvent.DealDetailsViewInitWithId -> handleDealsDetailsViewInit(event)
                     is DealsEvent.PaymentViewClicked -> handlePaymentClicked(event)
+                    is DealsEvent.CardNumberEntered -> handleCardNumberEntered(event)
+                    is DealsEvent.PaymentCancelClicked -> handlePaymentCancelClicked(event)
+                    is DealsEvent.PaymentSubmitClicked -> handlePaymentSubmitClicked(event)
                 }
             }
             .launchIn(viewModelScope)
@@ -82,7 +87,7 @@ class DealVM(private val getDealsUseCase: GetDealsUseCase,
         }
     }
 
-    private fun handleDealsListItemSelected(listItemSelected: DealVM.DealsEvent.DealListItemSelected) {
+    private fun handleDealsListItemSelected(listItemSelected: DealsEvent.DealListItemSelected) {
         sendNavigationEvent(SingeEvent(NavEvent.FragmentNavEvent(DealItemFragment::class.java, Bundle().apply {
             putParcelable(DealItemFragment.PRODUCT_EXTRA, listItemSelected.product)
         })))
@@ -112,14 +117,45 @@ class DealVM(private val getDealsUseCase: GetDealsUseCase,
     }
 
     private fun handlePaymentClicked(paymentViewClicked: DealsEvent.PaymentViewClicked) {
+        updateState(state.copy(
+            viewState = state.viewState.copy(
+                dealsPaymentViewState = DealsPaymentViewState.Show)))
         sendNavigationEvent(SingeEvent(NavEvent.FragmentDialogNavEvent(PaymentDialogFragment::class.java, Bundle())))
+    }
+
+    private fun handleCardNumberEntered(cardNumberEntered: DealsEvent.CardNumberEntered) {
+        when {
+            cardValidator.isValidCard(cardNumberEntered.cardNumber) -> {
+                updateState(state.copy(
+                    viewState = state.viewState.copy(
+                        dealsPaymentViewState = DealsPaymentViewState.EnableSubmit)))
+            }
+            else ->  {
+                    updateState(state.copy(
+                        viewState = state.viewState.copy(
+                            dealsPaymentViewState = DealsPaymentViewState.DisableSubmit)))
+            }
+        }
+    }
+
+    private fun handlePaymentSubmitClicked(paymentSubmitClicked: DealsEvent.PaymentSubmitClicked) {
+        updateState(state.copy(
+            viewState = state.viewState.copy(
+                dealsPaymentViewState = DealsPaymentViewState.Hide)))
+    }
+
+    private fun handlePaymentCancelClicked(paymentCancelClicked: DealsEvent.PaymentCancelClicked) {
+        updateState(state.copy(
+            viewState = state.viewState.copy(
+                dealsPaymentViewState = DealsPaymentViewState.Hide)))
     }
 
     private fun getDefaultViewState() : ViewState {
         return ViewState(
             ProcessingViewState.Hide,
             DealListViewState.Hide,
-            DealDetailsViewState.Hide
+            DealDetailsViewState.Hide,
+            DealsPaymentViewState.Hide,
         )
     }
 
@@ -130,6 +166,9 @@ class DealVM(private val getDealsUseCase: GetDealsUseCase,
         data class DealDetailsViewInit(val bundle: Bundle) : DealsEvent()
         data class DealDetailsViewInitWithId(val id : Int) : DealsEvent()
         object PaymentViewClicked : DealsEvent()
+        data class PaymentSubmitClicked(val cardNumber : String) : DealsEvent()
+        data class CardNumberEntered(val cardNumber: String) : DealsEvent()
+        object PaymentCancelClicked : DealsEvent()
     }
 
     data class InternalState(val viewState: ViewState)
@@ -138,6 +177,7 @@ class DealVM(private val getDealsUseCase: GetDealsUseCase,
         val processingViewState: ProcessingViewState,
         val dealListViewState: DealListViewState,
         val dealDetailsViewState: DealDetailsViewState,
+        val dealsPaymentViewState: DealsPaymentViewState
     )
 
     sealed class ProcessingViewState {
@@ -153,6 +193,14 @@ class DealVM(private val getDealsUseCase: GetDealsUseCase,
     sealed class DealDetailsViewState {
         object Hide : DealDetailsViewState()
         data class Show(val product: Product) : DealDetailsViewState()
+    }
+
+    sealed class DealsPaymentViewState {
+        object Init : DealsPaymentViewState()
+        object Hide : DealsPaymentViewState()
+        object Show : DealsPaymentViewState()
+        object EnableSubmit : DealsPaymentViewState()
+        object DisableSubmit : DealsPaymentViewState()
     }
 
     companion object {

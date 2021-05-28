@@ -4,10 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.DialogFragment
-import com.target.targetcasestudy.R
+import com.target.targetcasestudy.databinding.DialogPaymentBinding
+import com.target.targetcasestudy.ui.deals.viewmodel.DealVM
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 /**
  * Dialog that displays a minimal credit card entry form.
@@ -23,26 +24,44 @@ import com.target.targetcasestudy.R
  */
 class PaymentDialogFragment : DialogFragment() {
 
-  private lateinit var submitButton: Button
-  private lateinit var creditCardInput: EditText
+  private val viewModel : DealVM by sharedViewModel()
+  private lateinit var binding : DialogPaymentBinding
 
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View? {
-    val root = inflater.inflate(R.layout.dialog_payment, container, false)
+  ): View {
+    binding = DialogPaymentBinding.inflate(inflater, container, false).also {
+      it.lifecycleOwner = this@PaymentDialogFragment
+      it.vm = viewModel
+    }
+    return binding.root
+  }
 
-    submitButton = root.findViewById(R.id.submit)
-    creditCardInput = root.findViewById(R.id.card_number)
-    val cancelButton: Button = root.findViewById(R.id.cancel)
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
+    viewModel.viewState.observe(viewLifecycleOwner) { viewState ->
+      renderPaymentViewState(viewState.dealsPaymentViewState)
+    }
+    binding.submit.setOnClickListener {
+      viewModel.handleEvent(DealVM.DealsEvent.PaymentSubmitClicked(binding.cardNumber.text.toString()))
+    }
 
-    cancelButton.setOnClickListener { dismiss() }
-    submitButton.setOnClickListener { dismiss() }
+    binding.cardNumber.doAfterTextChanged { editable ->
+      viewModel.handleEvent(DealVM.DealsEvent.CardNumberEntered(editable.toString()))
+    }
 
-    // TODO enable the submit button based on card number validity using Validators.validateCreditCard()
+  }
 
-    return root
+  private fun renderPaymentViewState(state : DealVM.DealsPaymentViewState) {
+    when(state) {
+      is DealVM.DealsPaymentViewState.Init -> {}
+      is DealVM.DealsPaymentViewState.Show -> {}
+      is DealVM.DealsPaymentViewState.Hide -> dismiss()
+      is DealVM.DealsPaymentViewState.EnableSubmit -> binding.submit.isEnabled = true
+      is DealVM.DealsPaymentViewState.DisableSubmit -> binding.submit.isEnabled = false
+    }
   }
 
 }
