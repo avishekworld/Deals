@@ -91,7 +91,7 @@
                         android:lines="1"
                         tools:text="Google Pixel 4 XL 256GB" />
 
-                    <androidx.emoji.widget.EmojiTextView
+                    <com.target.targetcasestudy.ui.customview.DealEmojiTextView
                         android:id="@+id/item_description_text_view"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"

@@ -5,6 +5,8 @@ import life.avishekworld.data.cache.*
 import life.avishekworld.data.mapper.DealsMapper
 import life.avishekworld.data.mapper.ProductMapper
 import life.avishekworld.data.repository.DealsRepositoryImpl
+import life.avishekworld.data.util.EmojiUtil
+import life.avishekworld.data.util.EmojiUtilImpl
 import life.avishekworld.domain.repository.DealsRepository
 import life.avishekworld.domain.util.CardValidator
 import life.avishekworld.domain.util.CardValidatorImpl
@@ -60,5 +62,9 @@ val dataModule = module {
 
     single<CardValidator> {
         CardValidatorImpl(get())
+    }
+
+    single<EmojiUtil> {
+        EmojiUtilImpl()
     }
 }

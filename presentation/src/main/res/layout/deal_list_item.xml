@@ -97,6 +97,8 @@
             android:textSize="@dimen/deal_list_item__ship_text_size"
             android:textAllCaps="true"
             android:textColor="@color/colorPrimary"
+            android:background="@drawable/circle_drawable"
+            android:padding="@dimen/deal_list_item_padding"
             android:layout_marginEnd="@dimen/deal_list_item_margin"
             android:layout_marginTop="@dimen/deal_list_item_top_margin"
             app:layout_constraintEnd_toEndOf="parent"
