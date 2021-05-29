@@ -32,7 +32,9 @@ class DealItemFragment : Fragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     viewModel.viewState.observe(viewLifecycleOwner) { viewState ->
+      renderProcessingViewState(viewState.processingViewState)
       renderDealsDetails(viewState.dealDetailsViewState)
+      renderErrorView(viewState.errorViewState)
     }
     viewModel.handleEvent(DealVM.DealsEvent.DealDetailsViewInit(arguments ?: Bundle()))
   }
@@ -59,6 +61,23 @@ class DealItemFragment : Fragment() {
             }
           }
         }
+      }
+    }
+  }
+
+  private fun renderProcessingViewState(processingViewState: DealVM.ProcessingViewState) {
+    when(processingViewState) {
+      is DealVM.ProcessingViewState.Hide -> binding.processingView.visibility = View.GONE
+      is DealVM.ProcessingViewState.Show -> binding.processingView.visibility = View.VISIBLE
+    }
+  }
+
+  private fun renderErrorView(errorViewState: DealVM.ErrorViewState) {
+    when (errorViewState) {
+      is DealVM.ErrorViewState.Hide -> binding.errorView.visibility = View.GONE
+      is DealVM.ErrorViewState.Show -> {
+        binding.errorView.visibility = View.VISIBLE
+        binding.errorTextView.text = errorViewState.errorText
       }
     }
   }

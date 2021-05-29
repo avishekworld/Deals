@@ -39,6 +39,7 @@ class DealListFragment : Fragment() {
     viewModel.viewState.observe(viewLifecycleOwner) {
       renderProcessingViewState(it.processingViewState)
       renderDealListViewState(it.dealListViewState)
+      renderErrorView(it.errorViewState)
     }
     viewModel.handleEvent(DealVM.DealsEvent.DealListViewInit)
   }
@@ -56,6 +57,16 @@ class DealListFragment : Fragment() {
       is DealVM.DealListViewState.Show -> {
         binding.contentView.visibility = View.VISIBLE
         adapter.handleDeals(dealListViewState.deals)
+      }
+    }
+  }
+
+  private fun renderErrorView(errorViewState: DealVM.ErrorViewState) {
+    when (errorViewState) {
+      is DealVM.ErrorViewState.Hide -> binding.errorView.visibility = View.GONE
+      is DealVM.ErrorViewState.Show -> {
+        binding.errorView.visibility = View.VISIBLE
+        binding.errorTextView.text = errorViewState.errorText
       }
     }
   }

@@ -20,4 +20,6 @@
   <dimen name="deal_details_name_text_size">26sp</dimen>
   <dimen name="deal_details_description_text_size">18sp</dimen>
   <dimen name="deal_details_action_text_size">24sp</dimen>
+    <dimen name="deal_list_error_margin">20dp</dimen>
+  <dimen name="deal_list_error_text_size">16sp</dimen>
 </resources>

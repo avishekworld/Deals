@@ -12,6 +12,7 @@ import life.avishekworld.data.model.DealsResponse
 import life.avishekworld.data.model.ProductResponse
 import life.avishekworld.domain.model.Deals
 import life.avishekworld.domain.model.Product
+import life.avishekworld.domain.model.Result
 import life.avishekworld.domain.repository.DealsRepository
 
 class DealsRepositoryImpl(private val dealsApi: TargetDealsApi,
@@ -21,23 +22,23 @@ class DealsRepositoryImpl(private val dealsApi: TargetDealsApi,
                           private val dealsDetailsCache: DealsDetailsCache,
                           private val cacheUtil: CacheUtil) : DealsRepository {
 
-    override suspend fun getDeals(): Deals = withContext(Dispatchers.IO) {
+    override suspend fun getDeals(): Result<Deals> = withContext(Dispatchers.IO) {
         if (cacheUtil.shouldRefresh(dealsCache) || dealsCache.getDeals() == null) {
             val deals = dealsApi.getDeals().mapToDeals()
             dealsCache.saveDeals(deals)
-            requireNotNull(dealsCache.getDeals())
+            Result.Success(requireNotNull(dealsCache.getDeals()))
         } else {
-            requireNotNull(dealsCache.getDeals())
+            Result.Success(requireNotNull(dealsCache.getDeals()))
         }
     }
 
-    override suspend fun getDealDetails(id: Int): Product = withContext(Dispatchers.IO) {
+    override suspend fun getDealDetails(id: Int): Result<Product> = withContext(Dispatchers.IO) {
         if (cacheUtil.shouldRefresh(dealsDetailsCache) || dealsDetailsCache.getDealsDetails(id) == null) {
             val dealDetails = dealsApi.getDealDetails(id).mapToProduct()
             dealsDetailsCache.saveDealsDetails(id, dealDetails)
-            requireNotNull(dealsDetailsCache.getDealsDetails(id))
+            Result.Success(requireNotNull(dealsDetailsCache.getDealsDetails(id)))
         } else {
-            requireNotNull(dealsDetailsCache.getDealsDetails(id))
+            Result.Success(requireNotNull(dealsDetailsCache.getDealsDetails(id)))
         }
     }
 

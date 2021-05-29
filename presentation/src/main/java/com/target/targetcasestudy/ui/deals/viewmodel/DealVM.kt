@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import life.avishekworld.domain.model.Deals
 import life.avishekworld.domain.model.Product
+import life.avishekworld.domain.model.Result
 import life.avishekworld.domain.usecase.deals.GetDealsDetailsUseCase
 import life.avishekworld.domain.usecase.deals.GetDealsUseCase
 import life.avishekworld.domain.util.CardValidator
@@ -78,12 +79,23 @@ class DealVM(private val getDealsUseCase: GetDealsUseCase,
                 viewState = state.viewState.copy(
                     processingViewState = ProcessingViewState.Show)))
 
-            val deals = getDealsUseCase.run()
+            when(val result = getDealsUseCase.run()) {
+                is Result.Success -> {
+                    updateState(state.copy(
+                            viewState = state.viewState.copy(
+                                    processingViewState = ProcessingViewState.Hide,
+                                    dealListViewState = DealListViewState.Show(result.value))))
+                }
+                is Result.Failure -> {
+                    updateState(state.copy(
+                            viewState = state.viewState.copy(
+                                    errorViewState = ErrorViewState.Show(result.error.toString())
+                            )
+                    ))
+                }
+            }
 
-            updateState(state.copy(
-                viewState = state.viewState.copy(
-                    processingViewState = ProcessingViewState.Hide,
-                    dealListViewState = DealListViewState.Show(deals))))
+
         }
     }
 
@@ -107,12 +119,21 @@ class DealVM(private val getDealsUseCase: GetDealsUseCase,
                 viewState = state.viewState.copy(
                     processingViewState = ProcessingViewState.Show)))
 
-            val product = getDealsDetailsUseCase.run(event.id)
-
-            updateState(state.copy(
-                viewState = state.viewState.copy(
-                    processingViewState = ProcessingViewState.Hide,
-                    dealDetailsViewState = DealDetailsViewState.Show(product))))
+            when (val result = getDealsDetailsUseCase.run(event.id)) {
+                is Result.Success -> {
+                    updateState(state.copy(
+                            viewState = state.viewState.copy(
+                                    processingViewState = ProcessingViewState.Hide,
+                                    dealDetailsViewState = DealDetailsViewState.Show(result.value))))
+                }
+                is Result.Failure -> {
+                    updateState(state.copy(
+                            viewState = state.viewState.copy(
+                                    errorViewState = ErrorViewState.Show(result.error.toString())
+                            )
+                    ))
+                }
+            }
         }
     }
 
@@ -156,6 +177,7 @@ class DealVM(private val getDealsUseCase: GetDealsUseCase,
             DealListViewState.Hide,
             DealDetailsViewState.Hide,
             DealsPaymentViewState.Hide,
+            ErrorViewState.Hide
         )
     }
 
@@ -177,7 +199,8 @@ class DealVM(private val getDealsUseCase: GetDealsUseCase,
         val processingViewState: ProcessingViewState,
         val dealListViewState: DealListViewState,
         val dealDetailsViewState: DealDetailsViewState,
-        val dealsPaymentViewState: DealsPaymentViewState
+        val dealsPaymentViewState: DealsPaymentViewState,
+        val errorViewState: ErrorViewState,
     )
 
     sealed class ProcessingViewState {
@@ -201,6 +224,11 @@ class DealVM(private val getDealsUseCase: GetDealsUseCase,
         object Show : DealsPaymentViewState()
         object EnableSubmit : DealsPaymentViewState()
         object DisableSubmit : DealsPaymentViewState()
+    }
+
+    sealed class ErrorViewState {
+        object Hide : ErrorViewState()
+        data class Show(val errorText : String) : ErrorViewState()
     }
 
     companion object {
