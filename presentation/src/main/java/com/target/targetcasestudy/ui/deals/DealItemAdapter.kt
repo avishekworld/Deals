@@ -15,6 +15,7 @@ import life.avishekworld.domain.util.isNotNullAndNotEmpty
 
 typealias ItemClickListener = (Product) -> Unit
 
+//TODO add pagination support
 class DealItemAdapter(private val itemClickListener: ItemClickListener) : RecyclerView.Adapter<DealItemViewHolder>() {
 
   private var deals : Deals = Deals(emptyList())

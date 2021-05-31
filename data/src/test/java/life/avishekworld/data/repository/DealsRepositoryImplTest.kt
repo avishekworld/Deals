@@ -1,15 +1,23 @@
 package life.avishekworld.data.repository
 
 import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.mockk
-import kotlinx.coroutines.test.runBlockingTest
+import junit.framework.Assert.assertTrue
+import kotlinx.coroutines.runBlocking
 import life.avishekworld.data.api.deals.TargetDealsApi
 import life.avishekworld.data.cache.CacheUtil
 import life.avishekworld.data.cache.DealsCache
 import life.avishekworld.data.cache.DealsDetailsCache
 import life.avishekworld.data.mapper.DealsMapper
 import life.avishekworld.data.mapper.ProductMapper
+import life.avishekworld.data.model.DealsResponse
+import life.avishekworld.domain.model.Deals
+import life.avishekworld.domain.model.Result
 import org.junit.Test
+import retrofit2.HttpException
+import kotlin.test.assertEquals
 
 class DealsRepositoryImplTest {
 
@@ -30,7 +38,9 @@ class DealsRepositoryImplTest {
     )
 
     @Test
-    fun testGetDealsFromApiSuccess() = runBlockingTest {
+    fun testGetDealsFromApiSuccess() = runBlocking {
+        val dealsResponse = mockk<DealsResponse>()
+        val deals = mockk<Deals>()
         with(cacheUtil) {
             coEvery {
                 shouldRefresh(any())
@@ -39,7 +49,76 @@ class DealsRepositoryImplTest {
         with(dealsCache) {
             coEvery {
                 getDeals()
-            } returns null
+            } returns deals //Todo returns null andThen deals
+            coEvery {
+                saveDeals(deals)
+            } returns Unit
+        }
+        with(targetDealsApi) {
+            coEvery {
+                getDeals()
+            } returns dealsResponse
+        }
+        with(dealMapper) {
+            every {
+                map(dealsResponse)
+            } returns deals
+        }
+
+        val receivedResult = dealRepository.getDeals()
+
+        assertTrue(receivedResult is Result.Success<Deals>)
+        assertEquals(deals, (receivedResult as Result.Success<Deals>).value)
+        coVerify {
+            cacheUtil.shouldRefresh(dealsCache)
+            dealsCache.getDeals()
+            targetDealsApi.getDeals()
+            dealMapper.map(dealsResponse)
+            dealsCache.saveDeals(deals)
+        }
+    }
+
+    @Test
+    fun testGetDealsFromApiFailure() = runBlocking {
+        val dealsResponse = mockk<DealsResponse>()
+        val deals = mockk<Deals>()
+        val exception = mockk<HttpException>()
+        with(cacheUtil) {
+            coEvery {
+                shouldRefresh(any())
+            } returns true
+        }
+        with(dealsCache) {
+            coEvery {
+                getDeals()
+            } returns deals //Todo returns null andThen deals
+            coEvery {
+                saveDeals(deals)
+            } returns Unit
+        }
+        with(targetDealsApi) {
+            coEvery {
+                getDeals()
+            } throws exception
+        }
+        with(dealMapper) {
+            every {
+                map(dealsResponse)
+            } returns deals
+        }
+
+        val receivedResult = dealRepository.getDeals()
+
+        assertTrue(receivedResult is Result.Failure<Deals>)
+        assertEquals(exception, (receivedResult as Result.Failure<Deals>).error)
+        coVerify {
+            cacheUtil.shouldRefresh(dealsCache)
+            targetDealsApi.getDeals()
+        }
+        coVerify (exactly = 0){
+            dealMapper.map(dealsResponse)
+            dealsCache.saveDeals(deals)
+            dealsCache.getDeals()
         }
     }
 }

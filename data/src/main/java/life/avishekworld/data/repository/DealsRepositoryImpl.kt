@@ -23,22 +23,30 @@ class DealsRepositoryImpl(private val dealsApi: TargetDealsApi,
                           private val cacheUtil: CacheUtil) : DealsRepository {
 
     override suspend fun getDeals(): Result<Deals> = withContext(Dispatchers.IO) {
-        if (cacheUtil.shouldRefresh(dealsCache) || dealsCache.getDeals() == null) {
-            val deals = dealsApi.getDeals().mapToDeals()
-            dealsCache.saveDeals(deals)
-            Result.Success(requireNotNull(dealsCache.getDeals()))
-        } else {
-            Result.Success(requireNotNull(dealsCache.getDeals()))
+        try {
+            if (cacheUtil.shouldRefresh(dealsCache) || dealsCache.getDeals() == null) {
+                val deals = dealsApi.getDeals().mapToDeals()
+                dealsCache.saveDeals(deals)
+                Result.Success(requireNotNull(dealsCache.getDeals()))
+            } else {
+                Result.Success(requireNotNull(dealsCache.getDeals()))
+            }
+        } catch (e : Exception) {
+            Result.Failure(e)
         }
     }
 
     override suspend fun getDealDetails(id: Int): Result<Product> = withContext(Dispatchers.IO) {
-        if (cacheUtil.shouldRefresh(dealsDetailsCache) || dealsDetailsCache.getDealsDetails(id) == null) {
-            val dealDetails = dealsApi.getDealDetails(id).mapToProduct()
-            dealsDetailsCache.saveDealsDetails(id, dealDetails)
-            Result.Success(requireNotNull(dealsDetailsCache.getDealsDetails(id)))
-        } else {
-            Result.Success(requireNotNull(dealsDetailsCache.getDealsDetails(id)))
+        try {
+            if (cacheUtil.shouldRefresh(dealsDetailsCache) || dealsDetailsCache.getDealsDetails(id) == null) {
+                val dealDetails = dealsApi.getDealDetails(id).mapToProduct()
+                dealsDetailsCache.saveDealsDetails(id, dealDetails)
+                Result.Success(requireNotNull(dealsDetailsCache.getDealsDetails(id)))
+            } else {
+                Result.Success(requireNotNull(dealsDetailsCache.getDealsDetails(id)))
+            }
+        } catch (e : Exception) {
+            Result.Failure(e)
         }
     }
 

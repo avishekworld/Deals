@@ -53,10 +53,10 @@ dependencies {
 
     testImplementation project (":test_common")
     testImplementation 'junit:junit:4.12'
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlin_coroutine_test"
-    testImplementation "androidx.arch.core:core-testing:$android_x_arch_version"
-    testImplementation "io.insert-koin:koin-test:$koin_version"
     testImplementation "io.mockk:mockk:$mockk_version"
+    testImplementation "androidx.arch.core:core-testing:$android_x_arch_version"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlin_coroutine_test"
+    testImplementation "io.insert-koin:koin-test:$koin_version"
     testImplementation "org.robolectric:robolectric:$robolectric_version"
 
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

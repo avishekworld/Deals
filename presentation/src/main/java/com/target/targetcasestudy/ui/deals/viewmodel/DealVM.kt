@@ -1,8 +1,10 @@
 package com.target.targetcasestudy.ui.deals.viewmodel
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.*
+import com.target.targetcasestudy.R
 import com.target.targetcasestudy.navigation.NavEvent
 import com.target.targetcasestudy.navigation.SingeEvent
 import com.target.targetcasestudy.ui.deals.DealItemFragment
@@ -23,7 +25,8 @@ import life.avishekworld.domain.util.CardValidator
 
 class DealVM(private val getDealsUseCase: GetDealsUseCase,
              private val getDealsDetailsUseCase: GetDealsDetailsUseCase,
-             private val cardValidator: CardValidator) : ViewModel() {
+             private val cardValidator: CardValidator,
+             private val context: Context) : ViewModel() {
 
     private val _internalState = MutableLiveData(InternalState(getDefaultViewState()))
     val viewState : LiveData<ViewState> = _internalState.map {
@@ -89,7 +92,8 @@ class DealVM(private val getDealsUseCase: GetDealsUseCase,
                 is Result.Failure -> {
                     updateState(state.copy(
                             viewState = state.viewState.copy(
-                                    errorViewState = ErrorViewState.Show(result.error.toString())
+                                    processingViewState = ProcessingViewState.Hide,
+                                    errorViewState = ErrorViewState.Show(context.getString(R.string.general_error))
                             )
                     ))
                 }
@@ -129,7 +133,8 @@ class DealVM(private val getDealsUseCase: GetDealsUseCase,
                 is Result.Failure -> {
                     updateState(state.copy(
                             viewState = state.viewState.copy(
-                                    errorViewState = ErrorViewState.Show(result.error.toString())
+                                    processingViewState = ProcessingViewState.Hide,
+                                    errorViewState = ErrorViewState.Show(context.getString(R.string.general_error))
                             )
                     ))
                 }

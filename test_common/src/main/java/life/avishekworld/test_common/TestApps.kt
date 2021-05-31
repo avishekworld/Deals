@@ -9,6 +9,7 @@ import org.koin.core.context.loadKoinModules
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 
+@ExperimentalStdlibApi
 class MockkApp : Application() {
 
     override fun onCreate() {
